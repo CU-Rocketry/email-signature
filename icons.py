@@ -4,11 +4,11 @@ from PIL import Image, ImageDraw, ImageFont
 
 BG_COLOR = "#004e42"
 ICON_COLOR = "#ffcd00"
-IMAGE_SIZE = 64
-FONT_SIZE = 40 # the icons are fonts
+IMAGE_SIZE = 256
+FONT_SIZE = 160 # the icons are fonts
 
-# Scale factor for anti-aliasing (supersampling)
-SCALE = 10
+# Super sampling anti aliasing
+SCALE = 4
 DRAW_SIZE = IMAGE_SIZE * SCALE
 SCALED_FONT_SIZE = FONT_SIZE * SCALE
 
