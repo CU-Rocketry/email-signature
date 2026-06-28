@@ -68,6 +68,22 @@ def main():
 
         final_img = img.resize((IMAGE_SIZE, IMAGE_SIZE), Image.Resampling.BILINEAR) # shrink
 
+        pixels = final_img.load()
+        for i in range(IMAGE_SIZE):
+            for j in range(IMAGE_SIZE):
+                r, g, b, a = pixels[i, j]
+                
+                if a == 255: 
+                    noise = random.randint(-8, 8) 
+
+                    # apply noise while clamping to 0-255
+                    pixels[i, j] = (
+                        max(0, min(255, r + noise)), 
+                        max(0, min(255, g + noise)), 
+                        max(0, min(255, b + noise)), 
+                        255
+                    )
+
         # Save out the high-res PNG
         filepath = f"{OUTPUT_DIR}/{name}.png"
         final_img.save(filepath)
