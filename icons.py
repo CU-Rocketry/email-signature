@@ -9,14 +9,13 @@ IMAGE_SIZE = 48
 FONT_SIZE = 30 # the icons are fonts
 
 # Super sampling anti aliasing
-SCALE = 4
+SCALE = 10
 DRAW_SIZE = IMAGE_SIZE * SCALE
 SCALED_FONT_SIZE = FONT_SIZE * SCALE
 
 # get unicode from Code Point heading at https://icons.getbootstrap.com/icons/bootstrap/ for example
 ICONS = {
     "email": "\uF32C", # bi-envelope-fill
-    "link-45deg": "\uF470", # bi-link-45deg
     "linkedin": "\uF472", # bi-linkedin
     "instagram": "\uF437", # bi-instagram
     "discord": "\uF300", # bi-discord
@@ -45,44 +44,12 @@ def main():
 
         draw.ellipse((0, 0, DRAW_SIZE, DRAW_SIZE), fill=BG_COLOR) # draw circle background
 
-        # draw noise on the background to try and trick image inversion algorithms
-        pixels = img.load()
-        for i in range(DRAW_SIZE):
-            for j in range(DRAW_SIZE):
-                r, g, b, a = pixels[i, j]
-                if a == 255 and (r, g, b): # if pixel is opaque
-                    noise = random.randint(-8, 8) # generate noise value between -8 and 8
-                    
-                    # apply noise while clamping to 0-255
-                    pixels[i, j] = (
-                        max(0, min(255, r + noise)), 
-                        max(0, min(255, g + noise)), 
-                        max(0, min(255, b + noise)), 
-                        255
-                    )
-
         center_x = DRAW_SIZE / 2
         center_y = DRAW_SIZE / 2
 
         draw.text((center_x, center_y), unicode, font=font, fill=ICON_COLOR, anchor="mm") # center with middle-middle anchor
 
         final_img = img.resize((IMAGE_SIZE, IMAGE_SIZE), Image.Resampling.BILINEAR) # shrink
-
-        pixels = final_img.load()
-        for i in range(IMAGE_SIZE):
-            for j in range(IMAGE_SIZE):
-                r, g, b, a = pixels[i, j]
-                
-                if a == 255: 
-                    noise = random.randint(-8, 8) 
-
-                    # apply noise while clamping to 0-255
-                    pixels[i, j] = (
-                        max(0, min(255, r + noise)), 
-                        max(0, min(255, g + noise)), 
-                        max(0, min(255, b + noise)), 
-                        255
-                    )
 
         # Save out the high-res PNG
         filepath = f"{OUTPUT_DIR}/{name}.png"
