@@ -1,15 +1,14 @@
 import os
-from tkinter import font
 import urllib.request
 from PIL import Image, ImageDraw, ImageFont
 
 BG_COLOR = "#004e42"
 ICON_COLOR = "#ffcd00"
-IMAGE_SIZE = 48
-FONT_SIZE = 24 # the icons are fonts
+IMAGE_SIZE = 256
+FONT_SIZE = 160 # the icons are fonts
 
 # Super sampling anti aliasing
-SCALE = 10
+SCALE = 4
 DRAW_SIZE = IMAGE_SIZE * SCALE
 SCALED_FONT_SIZE = FONT_SIZE * SCALE
 
@@ -43,14 +42,7 @@ def main():
         img = Image.new("RGBA", (DRAW_SIZE, DRAW_SIZE), (255, 255, 255, 0)) # make transparent background image
         draw = ImageDraw.Draw(img)
 
-
-        border_thickness = 2 * SCALE
-        draw.ellipse(
-            (border_thickness, border_thickness, DRAW_SIZE - border_thickness, DRAW_SIZE - border_thickness), 
-            fill=BG_COLOR, 
-            outline="#ffffff", 
-            width=border_thickness
-        ) 
+        draw.ellipse((0, 0, DRAW_SIZE, DRAW_SIZE), fill=BG_COLOR) # draw circle background
 
         center_x = DRAW_SIZE / 2
         center_y = DRAW_SIZE / 2
