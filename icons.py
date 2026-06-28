@@ -1,11 +1,12 @@
 import os
 import urllib.request
 from PIL import Image, ImageDraw, ImageFont
+import random
 
 BG_COLOR = "#004e42"
 ICON_COLOR = "#ffcd00"
-IMAGE_SIZE = 256
-FONT_SIZE = 160 # the icons are fonts
+IMAGE_SIZE = 48
+FONT_SIZE = 30 # the icons are fonts
 
 # Super sampling anti aliasing
 SCALE = 4
@@ -43,6 +44,22 @@ def main():
         draw = ImageDraw.Draw(img)
 
         draw.ellipse((0, 0, DRAW_SIZE, DRAW_SIZE), fill=BG_COLOR) # draw circle background
+
+        # draw noise on the background to try and trick image inversion algorithms
+        pixels = img.load()
+        for i in range(DRAW_SIZE):
+            for j in range(DRAW_SIZE):
+                r, g, b, a = pixels[i, j]
+                if a == 255 and (r, g, b): # if pixel is opaque
+                    noise = random.randint(-8, 8) # generate noise value between -8 and 8
+                    
+                    # apply noise while clamping to 0-255
+                    pixels[i, j] = (
+                        max(0, min(255, r + noise)), 
+                        max(0, min(255, g + noise)), 
+                        max(0, min(255, b + noise)), 
+                        255
+                    )
 
         center_x = DRAW_SIZE / 2
         center_y = DRAW_SIZE / 2
